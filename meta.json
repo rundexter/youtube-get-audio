@@ -3,24 +3,16 @@
  */
 {
     //Required. Inputs the module expects.
-    "inputs": [
-        //e.g.
-        /*
-        {
-            "id": "from",
-            "title":"From"
-        }
-        */
-    ],
+    "inputs": [{
+        "id"          : "url",
+        "title"       : "Url",
+        "description" : "The YouTube URL to parse"
+    }],
     //Required. Outputs the module emits.
-    "outputs": [
-      //e.g.
-      /*
-        {
-            "id": "from",
-            "title":"From"
-        }
-      */
-    ],
+    "outputs": [{
+        "id"          : "url",
+        "title"       : "Url",
+        "description" : "The URL of the track"
+    }],
     "title": "YouTube Get Audio" /* Required.A display name for the module */
 }
