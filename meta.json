@@ -7,12 +7,17 @@
         "id"          : "url",
         "title"       : "Url",
         "description" : "The YouTube URL to parse"
+    }, {
+        "id"          : "file_folder",
+        "title"       : "File Folder",
+        "description" : "Path to the folder where your mp3(s) should be stored."
     }],
     //Required. Outputs the module emits.
     "outputs": [{
-        "id"          : "url",
-        "title"       : "Url",
-        "description" : "The URL of the track"
+        "id"          : "path",
+        "title"       : "Path",
+        "description" : "Path"
     }],
-    "title": "YouTube Get Audio" /* Required.A display name for the module */
+    "providers": ["dropbox"],
+    "title": "YouTube Audio To Dropbox" /* Required.A display name for the module */
 }
