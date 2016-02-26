@@ -14,9 +14,9 @@
     }],
     //Required. Outputs the module emits.
     "outputs": [{
-        "id"          : "path",
-        "title"       : "Path",
-        "description" : "Path"
+        "id"          : "url",
+        "title"       : "URL",
+        "description" : "The URL to the mp3 in dropbox"
     }],
     "providers": ["dropbox"],
     "title": "YouTube Audio To Dropbox" /* Required.A display name for the module */

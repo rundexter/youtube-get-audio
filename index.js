@@ -120,11 +120,22 @@ module.exports = {
             self
               .upload()
               .then(function() {
-                  client.resumableUploadFinish(self.file, self.cursor, function(err, stat) {
-                      return err
-                        ? self.fail(err)
-                        : self.complete(stat);
-                  });
+                  var makeUrl               = q.nbind(client.makeUrl, client, self.file, {downloadHack: true})
+                    , resumableUploadFinish = q.nbind(client.resumableUploadFinish, client)
+                  ;
+
+                  resumableUploadFinish(self.file, self.cursor)
+                    .then(function() { return makeUrl(); })
+                    .then(self.complete.bind(self))
+                    .catch(self.fail.bind(self))
+                    .done()
+                  ;
+
+                  //client.resumableUploadFinish(self.file, self.cursor, function(err, stat) {
+                  //    return err
+                  //      ? self.fail(err)
+                  //      : self.complete(stat);
+                  //});
               })
               .catch(function(err) {
                   self.fail(err);
