@@ -17,6 +17,14 @@
         "id"          : "url",
         "title"       : "URL",
         "description" : "The URL to the mp3 in dropbox"
+    }, {
+        "id"          : "type",
+        "title"       : "Type",
+        "description" : "The mime type"
+    }, {
+        "id"          : "length",
+        "title"       : "Length",
+        "description" : "The length of the mp3"
     }],
     "providers": ["dropbox"],
     "title": "YouTube Audio To Dropbox" /* Required.A display name for the module */

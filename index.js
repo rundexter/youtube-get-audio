@@ -5,6 +5,7 @@ var yt       = require('youtube-audio-stream')
   , dropbox  = require('dropbox')
   , stream   = require('stream')
   , q        = require('q')
+  , _        = require('lodash')
 ;
 
 function getAudio(id, writeStream) {
@@ -125,8 +126,14 @@ module.exports = {
                   ;
 
                   resumableUploadFinish(self.file, self.cursor)
-                    .then(function() { return makeUrl(); })
-                    .then(self.complete.bind(self))
+                    .then(function(result) { 
+                        self.state = {
+                            length: result.size
+                            , type: result.mimeType
+                        };
+                        return makeUrl(); 
+                    })
+                    .then(self.done.bind(self)) 
                     .catch(self.fail.bind(self))
                     .done()
                   ;
@@ -146,5 +153,12 @@ module.exports = {
         process.env.PATH += ':' + __dirname;
 
         getAudio(key, writable);
+    }
+    , done: function(urlResult) {
+        this.complete({
+            url      : urlResult.url
+            , length : _.get(this, 'state.length')
+            , type   : _.get(this, 'state.type')
+        });
     }
 };
