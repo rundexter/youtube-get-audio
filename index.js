@@ -150,28 +150,32 @@ module.exports = {
         //modify path for local version of ffmpeg
         process.env.PATH += ':' + __dirname;
 
-        var lastIndexKey = step.config('id') + '_lastIndex'
-          , lastIndex    = dexter.global(lastIndexKey, 0)
+        var nextIndexKey = step.config('id') + '_nextIndex'
+          , nextIndex    = dexter.global(nextIndexKey, 0)
           , url, key, file
         ;
 
-        console.log('lastIndex', lastIndex);
+        console.log('nextIndex', nextIndex);
 
-        url          = urls[lastIndex];
-        key          = parseQueryParameters(url.split('?')[1]).v;
-        this.file    = path.join(file_folder, key+'.mp3');
-        this.lastRun = lastIndex >= (urls.length - 1);
-        this.resultsKey = step.config('id') + '_results';
-        this.dexter     = dexter;
+        url          = urls[nextIndex];
+        this.lastRun = nextIndex >= (urls.length - 1);
+        this.dexter  = dexter;
 
-        getAudio(key, writable);
+        if(url) {
+            key          = parseQueryParameters(url.split('?')[1]).v;
+            this.file    = path.join(file_folder, key+'.mp3');
+            this.resultsKey = step.config('id') + '_results';
 
-        //setup next index
-        dexter.setGlobal(lastIndexKey, lastIndex+1);
+            getAudio(key, writable);
+
+            //setup next index
+            dexter.setGlobal(nextIndexKey, nextIndex+1);
+        } else {
+            this.done({});
+        }
     }
     , done: function(urlResult) {
         var results = this.dexter.global(this.resultsKey, []);
-        console.log(results);
 
         results.push({
             url      : urlResult.url
