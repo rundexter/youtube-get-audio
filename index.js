@@ -78,13 +78,12 @@ module.exports = {
      * @param {AppData} dexter Container for all data used in this workflow.
      */
     , run: function(step, dexter) {
-        var key    = parseQueryParameters(step.input('url').first().split('?')[1]).v
+        var urls    = step.input('url')
           , self   = this
           , client = new dropbox.Client(
               {token: dexter.provider('dropbox').credentials('access_token')}
           )
           , file_folder = step.input('file_folder').first()
-          , file = path.join(file_folder, key+'.mp3')
           , writable = new stream.Writable({
               highWaterMark: 4194304
           })
@@ -92,7 +91,6 @@ module.exports = {
         ;
 
         this.client = client;
-        this.file   = file;
 
         writable._write = function(chunk, encoding, next) {
             self.absorbBuffer(chunk);
@@ -152,13 +150,40 @@ module.exports = {
         //modify path for local version of ffmpeg
         process.env.PATH += ':' + __dirname;
 
+        var lastIndexKey = step.config('id') + '_lastIndex'
+          , lastIndex    = dexter.global(lastIndexKey, 0)
+          , url, key, file
+        ;
+
+        console.log('lastIndex', lastIndex);
+
+        url          = urls[lastIndex];
+        key          = parseQueryParameters(url.split('?')[1]).v;
+        this.file    = path.join(file_folder, key+'.mp3');
+        this.lastRun = lastIndex >= (urls.length - 1);
+        this.resultsKey = step.config('id') + '_results';
+        this.dexter     = dexter;
+
         getAudio(key, writable);
+
+        //setup next index
+        dexter.setGlobal(lastIndexKey, lastIndex+1);
     }
     , done: function(urlResult) {
-        this.complete({
+        var results = this.dexter.global(this.resultsKey, []);
+        console.log(results);
+
+        results.push({
             url      : urlResult.url
             , length : _.get(this, 'state.length')
             , type   : _.get(this, 'state.type')
         });
+        
+        if(this.lastRun) {
+            this.complete(results);
+        } else {
+            this.dexter.setGlobal(this.resultsKey, results);
+            this.replay();
+        }
     }
 };

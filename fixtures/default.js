@@ -73,7 +73,7 @@ module.exports = _.merge({
              */
             input: {
                 //Replace VAR1 with the name of an expected input, and add more inputs as needed.
-                url:'https://www.youtube.com/watch?v=OlmV8zUhG_8',
+                url:['https://www.youtube.com/watch?v=OlmV8zUhG_8', 'https://www.youtube.com/watch?v=79NNnK0kZoc'],
                 file_folder: '/mp3s'
             }
         }
