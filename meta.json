@@ -26,6 +26,7 @@
         "title"       : "Length",
         "description" : "The length of the mp3"
     }],
+    "icon":"youtube-play",
     "providers": ["dropbox"],
     "title": "YouTube Audio To Dropbox" /* Required.A display name for the module */
 }
