@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Get the audio track from a YouTube video.",
   "main": "index.js",
-  "author": "Daniel Ilkovich",
+  "author": "Run Dexter, Inc",
   "license": "MIT",
   "private": true,
   "dependencies": {
